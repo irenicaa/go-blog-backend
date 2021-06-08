@@ -46,7 +46,7 @@ func (db Post) Create(post models.Post) (id int, err error) {
 
 // Update ...
 func (db Post) Update(id int, post models.Post) error {
-	panic("not yet implemented")
+	return db.pool.Model(&models.Post{}).Where("id = ?", id).Updates(post).Error
 }
 
 // Delete ...
