@@ -17,7 +17,12 @@ func NewPost(pool *gorm.DB) Post {
 
 // GetAll ...
 func (db Post) GetAll() ([]models.Post, error) {
-	panic("not yet implemented")
+	var posts []models.Post
+	if err := db.pool.Find(&posts).Error; err != nil {
+		return nil, err
+	}
+
+	return posts, nil
 }
 
 // GetSingle ...
