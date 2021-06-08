@@ -22,7 +22,12 @@ func (db Post) GetAll() ([]models.Post, error) {
 
 // GetSingle ...
 func (db Post) GetSingle(id int) (models.Post, error) {
-	panic("not yet implemented")
+	var post models.Post
+	if err := db.pool.Where("id = ?", id).First(&post).Error; err != nil {
+		return models.Post{}, err
+	}
+
+	return post, nil
 }
 
 // Create ...
