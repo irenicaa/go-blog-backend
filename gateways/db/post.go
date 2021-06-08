@@ -36,12 +36,16 @@ func (db Post) GetSingle(id int) (models.Post, error) {
 }
 
 // Create ...
-func (db Post) Create(todo models.Post) (id int, err error) {
-	panic("not yet implemented")
+func (db Post) Create(post models.Post) (id int, err error) {
+	if err := db.pool.Create(&post).Error; err != nil {
+		return 0, err
+	}
+
+	return int(post.ID), nil
 }
 
 // Update ...
-func (db Post) Update(id int, todo models.Post) error {
+func (db Post) Update(id int, post models.Post) error {
 	panic("not yet implemented")
 }
 
