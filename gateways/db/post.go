@@ -51,5 +51,5 @@ func (db Post) Update(id int, post models.Post) error {
 
 // Delete ...
 func (db Post) Delete(id int) error {
-	panic("not yet implemented")
+	return db.pool.Where("id = ?", id).Delete(&models.Post{}).Error
 }
