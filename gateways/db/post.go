@@ -16,9 +16,14 @@ func NewPost(pool *gorm.DB) Post {
 }
 
 // GetAll ...
-func (db Post) GetAll() ([]models.Post, error) {
+func (db Post) GetAll(pagination models.Pagination) ([]models.Post, error) {
 	var posts []models.Post
-	if err := db.pool.Find(&posts).Error; err != nil {
+	err := db.pool.
+		Offset((pagination.Page - 1) * pagination.PageSize).
+		Limit(pagination.PageSize).
+		Find(&posts).
+		Error
+	if err != nil {
 		return nil, err
 	}
 
