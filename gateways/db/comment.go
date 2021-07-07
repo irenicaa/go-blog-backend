@@ -29,3 +29,17 @@ func (db Comment) GetAll(postID int) ([]models.Comment, error) {
 
 	return comments, nil
 }
+
+// Create ...
+func (db Comment) Create(postID uint, comment models.Comment) (
+	id int,
+	err error,
+) {
+	comment.PostID = postID
+
+	if err := db.pool.Create(&comment).Error; err != nil {
+		return 0, err
+	}
+
+	return int(comment.ID), nil
+}
