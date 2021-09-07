@@ -11,6 +11,7 @@ import (
 // PostStorage ...
 type PostStorage interface {
 	GetAll(pagination models.Pagination) ([]models.Post, error)
+	GetSingle(id int) (models.Post, error)
 }
 
 // Post ...
@@ -26,4 +27,19 @@ func (handler Post) GetAll(ctx echo.Context) error {
 	}
 
 	return ctx.JSON(http.StatusOK, posts)
+}
+
+// GetSingle ...
+func (handler Post) GetSingle(ctx echo.Context) error {
+	var id int
+	if err := echo.PathParamsBinder(ctx).Int("id", &id).BindError(); err != nil {
+		return fmt.Errorf("unable to bind the path parameters: %w", err)
+	}
+
+	post, err := handler.Storage.GetSingle(id)
+	if err != nil {
+		return fmt.Errorf("unable to get the post: %w", err)
+	}
+
+	return ctx.JSON(http.StatusOK, post)
 }
