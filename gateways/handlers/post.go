@@ -12,6 +12,7 @@ import (
 type PostStorage interface {
 	GetAll(pagination models.Pagination) ([]models.Post, error)
 	GetSingle(id int) (models.Post, error)
+	Create(post models.Post) (id int, err error)
 }
 
 // Post ...
@@ -41,5 +42,21 @@ func (handler Post) GetSingle(ctx echo.Context) error {
 		return fmt.Errorf("unable to get the post: %w", err)
 	}
 
+	return ctx.JSON(http.StatusOK, post)
+}
+
+// Create ...
+func (handler Post) Create(ctx echo.Context) error {
+	var post models.Post
+	if err := ctx.Bind(&post); err != nil {
+		return fmt.Errorf("unable to bind the body: %w", err)
+	}
+
+	id, err := handler.Storage.Create(post)
+	if err != nil {
+		return fmt.Errorf("unable to create the post: %w", err)
+	}
+
+	post.ID = uint(id)
 	return ctx.JSON(http.StatusOK, post)
 }
